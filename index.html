@@ -183,10 +183,10 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Replace "YOUR_GEMINI_API_KEY_HERE" with your actual API key from Google.
-            // This is required for the application to work when hosted on your own site.
+            // NOTE: The Gemini API key will be injected into this file by a GitHub Actions workflow.
+            // Do not commit your key directly to the repository.
+            const apiKey = '${{ secrets.GEMINI_API_KEY }}';
             const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=';
-            const apiKey = "YOUR_GEMINI_API_KEY_HERE";
             const summarizeTicketSwappingBtn = document.getElementById('summarize-ticket-swapping');
             const summaryTicketSwappingDiv = document.getElementById('summary-ticket-swapping');
             const summarizeDoubleDippingBtn = document.getElementById('summarize-double-dipping');
