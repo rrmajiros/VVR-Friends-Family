@@ -1,38 +1,40 @@
+name: Provide Gemini API Key
+
 on:
-workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
-use-api-key:
-runs-on: ubuntu-latest
+  use-api-key:
+    runs-on: ubuntu-latest
 
-steps:
-  - name: Checkout repository
-    uses: actions/checkout@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-  - name: Set up Node.js
-    uses: actions/setup-node@v4
-    with:
-      node-version: '20'
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-  # This step shows how to make the secret available as an environment variable.
-  # The name of the environment variable (GEMINI_API_KEY) can be customized.
-  - name: Provide the Gemini API key
-    run: echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> $GITHUB_ENV
-    env:
-      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      - name: Provide the Gemini API key
+        run: echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> $GITHUB_ENV
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
-  # This is an example of a subsequent step that uses the API key.
-  # The key is now available as an environment variable, which prevents
-  # it from being exposed in logs.
-  - name: Verify API Key is available
-    run: |
-      if [ -n "$GEMINI_API_KEY" ]; then
-        echo "Gemini API key is successfully set as an environment variable."
-      else
-        echo "Error: Gemini API key is not set."
-        exit 1
-      fi
+      - name: Substitute API Key in HTML
+        run: sed -i "s|'{{ secrets.GEMINI_API_KEY }}'|'$GEMINI_API_KEY'|g" index.html
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
-  # You can now run a script that uses the environment variable, for example:
-  # - name: Run script with API key
-  #   run: node your_script_name.js
+      - name: Verify API Key is available
+        run: |
+          if [ -n "$GEMINI_API_KEY" ]; then
+            echo "Gemini API key is successfully set as an environment variable."
+          else
+            echo "Error: Gemini API key is not set."
+            exit 1
+          fi
+
+      # You can now run a script that uses the environment variable, for example:
+      # - name: Run script with API key
+      #   run: node your_script_name.js
