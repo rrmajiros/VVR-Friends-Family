@@ -216,7 +216,7 @@
 
                 while (retries < maxRetries) {
                     try {
-                        response = await fetch(API_URL + apiKey, fetchOptions);
+                        response = await fetch(API_URL + GEMINI_API_KEY, fetchOptions);
                         if (response.ok) {
                             break;
                         }
